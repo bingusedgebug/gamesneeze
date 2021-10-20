@@ -500,6 +500,13 @@ enum MoveType_t
 	MOVETYPE_MAX_BITS = 4
 };
 
+// @credits: https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/shared/shareddefs.h
+#define TICK_INTERVAL			( Interfaces::globals->interval_per_tick )
+#define TIME_TO_TICKS( t )		( static_cast<int>( 0.5f + static_cast<float>( t ) / TICK_INTERVAL ) )
+#define TICKS_TO_TIME( t )		( TICK_INTERVAL * static_cast<float>( t ) )
+#define ROUND_TO_TICKS( t )		( TICK_INTERVAL * TIME_TO_TICKS( t ) )
+#define TICK_NEVER_THINK		( -1 )
+
 #define FL_ONGROUND				(1<<0)	// At rest / on the ground
 #define FL_DUCKING				(1<<1)	// Player flag -- Player is fully crouched
 #define FL_WATERJUMP			(1<<2)	// player jumping out of water

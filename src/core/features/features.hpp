@@ -41,16 +41,19 @@ namespace Features {
             int playerFlags;
             float playerVelocity;
             Vector playerHeadPos;
+            Vector playerOrigin;
+            float playerSimTime;
         };
 
-        struct BackTrackTick {
+        struct BacktrackTick {
             std::map<int, BacktrackPlayer> players;
             int tickCount;
         };
 
         inline int lastBacktrack;
-        inline std::vector<BackTrackTick> backtrackTicks;
+        inline std::vector<BacktrackTick> backtrackTicks;
 
+        bool isRecordValid(float simtime);
         void store(CUserCmd* cmd);
         void createMove(CUserCmd* cmd);
     }

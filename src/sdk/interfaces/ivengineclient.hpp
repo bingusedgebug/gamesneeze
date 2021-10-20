@@ -120,6 +120,12 @@ public:
 		return getVirtualFunc<Fn>(this, 37)(this);
 	}
 
+	INetChannelInfo* GetNetChannelInfo() {
+		typedef INetChannelInfo* (*Fn)(void*);
+		return getVirtualFunc<Fn>(this, 78)(this);
+	}
+
+
     // Inserts szCmdString into the command buffer as if it was typed by the client to his/her console.
 	// And then executes the command string immediately (vs ClientCmd() which executes in the next frame)
 	//
