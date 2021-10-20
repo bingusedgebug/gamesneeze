@@ -66,6 +66,7 @@ public:
 	}
 
 	NETVAR("DT_BaseEntity", "m_Collision", collideable, ICollideable);
+	NETVAR("DT_BaseEntity", "m_flSimulationTime", simtime, float);
 	NETVAR("DT_BaseEntity", "m_iTeamNum", team, int);
 	NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool);
 };

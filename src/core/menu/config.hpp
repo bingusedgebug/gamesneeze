@@ -131,7 +131,7 @@ namespace Config {
 
             // Backtrack {
                 CONFIGITEM("Legit>Backtrack>Backtrack", false),
-                CONFIGITEM("Legit>Backtrack>Backtrack Ticks", 12),
+                CONFIGITEM("Legit>Backtrack>Backtrack Distance", 69),
                 CONFIGITEM("Legit>Backtrack>Simple Forwardtracking", false),
             // }
             // Triggerbot {
