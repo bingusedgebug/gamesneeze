@@ -106,7 +106,7 @@ void chamPlayer(void* thisptr, void* ctx, const DrawModelState_t &state, const M
                     if (Features::Backtrack::backtrackTicks.size() > 2) {
                         if (CONFIGINT("Visuals>Players>Enemies>Chams>Backtrack Material")) {
                             if (CONFIGBOOL("Visuals>Players>Enemies>Chams>Trail")) {
-                                for (Features::Backtrack::BackTrackTick tick : Features::Backtrack::backtrackTicks) {
+                                for (Features::Backtrack::BacktrackTick tick : Features::Backtrack::backtrackTicks) {
                                     if (tick.tickCount % 2 == 0) { // only draw every other tick to reduce lag
                                         if (tick.players.find(p->index()) != tick.players.end()) {
                                             if (abs((tick.players.at(p->index()).playerHeadPos - p->getBonePos(8)).Length()) > 2) {
@@ -117,7 +117,7 @@ void chamPlayer(void* thisptr, void* ctx, const DrawModelState_t &state, const M
                                 }
                             }
                             else {
-                                Features::Backtrack::BackTrackTick tick = Features::Backtrack::backtrackTicks.at(Features::Backtrack::backtrackTicks.size()-1);
+                                Features::Backtrack::BacktrackTick tick = Features::Backtrack::backtrackTicks.at(Features::Backtrack::backtrackTicks.size()-1);
                                 if (tick.players.find(p->index()) != tick.players.end()) {
                                     if (abs((tick.players.at(p->index()).playerHeadPos - p->getBonePos(8)).Length()) > 2) {
                                         cham(thisptr, ctx, state, pInfo, tick.players.at(p->index()).boneMatrix, CONFIGCOL("Visuals>Players>Enemies>Chams>Backtrack Color"), CONFIGINT("Visuals>Players>Enemies>Chams>Backtrack Material"), false);

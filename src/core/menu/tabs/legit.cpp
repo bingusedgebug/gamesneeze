@@ -183,9 +183,9 @@ void Menu::drawLegitTab() {
         ImGui::Separator();
         ImGui::Checkbox("Backtrack", &CONFIGBOOL("Legit>Backtrack>Backtrack"));
         if (CONFIGBOOL("Legit>Backtrack>Backtrack")) {
-            ImGui::Text("Backtrack Ticks");
+            ImGui::Text("Backtrack Distance (hammer units)");
             ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
-            ImGui::SliderInt("##Backtrack Ticks", &CONFIGINT("Legit>Backtrack>Backtrack Ticks"), 1, 12);
+            ImGui::SliderInt("##Backtrack Distance", &CONFIGINT("Legit>Backtrack>Backtrack Distance"), 1, 69);
         }
         ImGui::Checkbox("Simple Forwardtracking", &CONFIGBOOL("Legit>Backtrack>Simple Forwardtracking"));
         ImGui::EndChild();

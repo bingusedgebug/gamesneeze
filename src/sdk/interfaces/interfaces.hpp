@@ -5,6 +5,7 @@
 #include <string>
 
 #include "ibaseclientdll.hpp"
+#include "inetchannel.hpp"
 #include "ivengineclient.hpp"
 #include "ipanel.hpp"
 #include "icliententitylist.hpp"
