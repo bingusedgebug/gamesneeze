@@ -63,7 +63,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                 aimWhileBlind = CONFIGBOOL("Legit>LegitBot>Heavy>Aim While Blind");
             }
 
-            float closestDelta = FLT_MAX;
+            float closestDelta = FOV;
             QAngle angleToClosestBone = {0, 0, 0};
 
             // NOTE: We should really be using returns more, it cleans up
@@ -114,10 +114,8 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                     }
                 }
             }
-            if (closestDelta < FOV) {
-                if (((angleToClosestBone) / smoothing).Length() > 0.005f) { // prevent micro-movements
-                    cmd->viewangles += (angleToClosestBone) / smoothing;
-                }
+            if (((angleToClosestBone) / smoothing).Length() > 0.005f) {  // prevent micro-movements
+                cmd->viewangles += (angleToClosestBone) / smoothing;
             }
         }
     }
