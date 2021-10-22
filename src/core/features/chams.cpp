@@ -21,18 +21,16 @@ IMaterial* createMaterial(const char* materialName, const char* materialType, co
 	return Interfaces::materialSystem->CreateMaterial(materialName, keyValues);
 }
 
-void createMaterials() {
-    static bool init;
-    if (!init) {
-        shadedMaterial = Interfaces::materialSystem->FindMaterial("debug/debugambientcube", 0);
-        flatMaterial = Interfaces::materialSystem->FindMaterial("debug/debugdrawflat", 0);
-        pulseMaterial = Interfaces::materialSystem->FindMaterial("dev/screenhighlight_pulse", 0);
-        energyBallMaterial = Interfaces::materialSystem->FindMaterial("effects/energyball", 0);
-        plasticMaterial = Interfaces::materialSystem->FindMaterial("models/inventory_items/trophy_majors/gloss", 0);
-        darudeMaterial = Interfaces::materialSystem->FindMaterial("models/inventory_items/music_kit/darude_01/mp3_detail", 0);
+bool Features::Chams::createMaterials() {
+    shadedMaterial = Interfaces::materialSystem->FindMaterial("debug/debugambientcube", 0);
+    flatMaterial = Interfaces::materialSystem->FindMaterial("debug/debugdrawflat", 0);
+    pulseMaterial = Interfaces::materialSystem->FindMaterial("dev/screenhighlight_pulse", 0);
+    energyBallMaterial = Interfaces::materialSystem->FindMaterial("effects/energyball", 0);
+    plasticMaterial = Interfaces::materialSystem->FindMaterial("models/inventory_items/trophy_majors/gloss", 0);
+    darudeMaterial = Interfaces::materialSystem->FindMaterial("models/inventory_items/music_kit/darude_01/mp3_detail", 0);
 
-        glowMaterial = createMaterial("glow", "VertexLitGeneric",
-        R"#("VertexLitGeneric" {
+    glowMaterial = createMaterial("glow", "VertexLitGeneric",
+                                  R"#("VertexLitGeneric" {
             "$additive" "1"
             "$envmap" "models/effects/cube_white"
             "$envmaptint" "[1 1 1]"
@@ -41,8 +39,8 @@ void createMaterials() {
             "$alpha" "0.8"
         })#");
 
-        oilMaterial = createMaterial("pearlescent", "VertexLitGeneric",
-        R"#("VertexLitGeneric"
+    oilMaterial = createMaterial("pearlescent", "VertexLitGeneric",
+                                 R"#("VertexLitGeneric"
         {
             "$basetexture" "vgui/white_additive"
             "$nocull" "1"
@@ -55,8 +53,8 @@ void createMaterials() {
             "$pearlescent" "6"
         })#");
 
-        init = true;
-    }
+    return (shadedMaterial && flatMaterial && pulseMaterial && energyBallMaterial && plasticMaterial && darudeMaterial &&
+            glowMaterial && oilMaterial);
 }
 
 void cham(void* thisptr, void* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld, ImColor color, int mat, bool ignoreZ, bool wireframe = false) {
@@ -180,7 +178,7 @@ void chamWeapon(void* thisptr, void* ctx, const DrawModelState_t &state, const M
 }
 
 void Features::Chams::drawModelExecute(void* thisptr, void* ctx, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld) {
-    createMaterials();
+    //createMaterials();
 
 	const char* modelName = Interfaces::modelInfo->GetModelName(pInfo.pModel);
 	if (strstr(modelName, "models/player") && !strstr(modelName, "shadow")) {
