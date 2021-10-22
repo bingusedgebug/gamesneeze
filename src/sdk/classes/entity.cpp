@@ -3,11 +3,12 @@
 #include "vector.h"
 #include <vector>
 
-bool Player::isEnemy() { // team check that accounts for dangerzone teams
+bool Player::isEnemy() { // team check that accounts for dangerzone teams and ffa
     if (strstr(Offsets::getLocalClient(-1)->m_szLevelNameShort, "dz_")) {
         return (Globals::localPlayer->survivalTeam() == -1) ? true : (Globals::localPlayer->survivalTeam() != this->survivalTeam());
     }
-	return this->team() != Globals::localPlayer->team();
+    static ConVar *mp_teammates_are_enemies = Interfaces::convar->FindVar("mp_teammates_are_enemies");
+	return this->team() != Globals::localPlayer->team() || mp_teammates_are_enemies->GetInt();
 }
 
 bool visCheck(Player* player) {
@@ -20,13 +21,11 @@ bool visCheck(Player* player) {
         Trace traceToHead;
         Ray rayToHead;
         rayToHead.Init(Globals::localPlayer->eyePos(), player->getBonePos(8));
-                                    // solid|opaque|moveable|ignore nodraw
         Interfaces::trace->TraceRay(rayToHead, MASK_SHOT, &filter, &traceToHead);
 
         Trace traceToUpperSpinal;
         Ray rayToUpperSpinal;
         rayToUpperSpinal.Init(Globals::localPlayer->eyePos(), player->getBonePos(6));
-                                    // solid|opaque|moveable|ignore nodraw
         Interfaces::trace->TraceRay(rayToUpperSpinal, MASK_SHOT, &filter, &traceToUpperSpinal);
 
         return ((traceToHead.m_pEntityHit == player) || (traceToUpperSpinal.m_pEntityHit == player)) && !Offsets::lineGoesThroughSmoke(Globals::localPlayer->eyePos(), player->eyePos(), 1);
