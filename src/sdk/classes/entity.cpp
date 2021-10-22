@@ -21,15 +21,15 @@ bool visCheck(Player* player) {
         Ray rayToHead;
         rayToHead.Init(Globals::localPlayer->eyePos(), player->getBonePos(8));
                                     // solid|opaque|moveable|ignore nodraw
-        Interfaces::trace->TraceRay(rayToHead, (0x1 | 0x80 | 0x4000 |    0x2000   ), &filter, &traceToHead);
+        Interfaces::trace->TraceRay(rayToHead, MASK_SHOT, &filter, &traceToHead);
 
         Trace traceToUpperSpinal;
         Ray rayToUpperSpinal;
         rayToUpperSpinal.Init(Globals::localPlayer->eyePos(), player->getBonePos(6));
                                     // solid|opaque|moveable|ignore nodraw
-        Interfaces::trace->TraceRay(rayToUpperSpinal, (0x1 | 0x80 | 0x4000 |    0x2000   ), &filter, &traceToUpperSpinal);
+        Interfaces::trace->TraceRay(rayToUpperSpinal, MASK_SHOT, &filter, &traceToUpperSpinal);
 
-        return (traceToHead.m_pEntityHit == player) && (traceToUpperSpinal.m_pEntityHit == player) && !Offsets::lineGoesThroughSmoke(Globals::localPlayer->eyePos(), player->eyePos(), 1);
+        return ((traceToHead.m_pEntityHit == player) || (traceToUpperSpinal.m_pEntityHit == player)) && !Offsets::lineGoesThroughSmoke(Globals::localPlayer->eyePos(), player->eyePos(), 1);
     }
     return false;
 }
