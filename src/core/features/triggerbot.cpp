@@ -12,6 +12,33 @@ Entity* findPlayerThatRayHits(Vector start, Vector end, Trace* traceToPlayer) {
     return traceToPlayer->m_pEntityHit;
 }
 
+int Features::Triggerbot::getHitChance(QAngle viewAngles) {
+    if (!Globals::localPlayer) return 0;
+    Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->activeWeapon() &
+                                                                      0xFFF);  // GetClientEntityFromHandle is being gay
+    if (!weapon) return 0;
+
+    Vector endPos;
+    Trace traceToPlayer;
+    int hitchance = 0;
+
+    float spread = RAD2DEG(weapon->GetInaccuracy() + weapon->GetSpread());
+    for (int i = 0; i < 100; i++) {
+        QAngle randomSpreadAngle = {randFloat(0, spread) - (spread / 2), randFloat(0, spread) - (spread / 2),
+                                    randFloat(0, spread) - (spread / 2)};
+
+        angleVectors(viewAngles + randomSpreadAngle, endPos);
+
+        endPos = Globals::localPlayer->eyePos() + (endPos * 4096);
+
+        Entity* ent = findPlayerThatRayHits(Globals::localPlayer->eyePos(), endPos, &traceToPlayer);
+        if (ent && ent->clientClass()->m_ClassID == CCSPlayer && !ent->dormant() && ((Player*)ent)->isEnemy())
+            hitchance++;
+    }
+
+    return hitchance;
+}
+
 void Features::Triggerbot::createMove(CUserCmd* cmd) {
     if (Globals::localPlayer && CONFIGBOOL("Legit>Triggerbot>Triggerbot") && Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))) {
         Weapon *weapon = (Weapon *) Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->activeWeapon() & 0xFFF); // GetClientEntityFromHandle is being gay
