@@ -35,6 +35,13 @@ Powered by...\n\
             Log::log(ERR, "Failed to initialise hooks!");
         }
 
+        /* Initialise Materials for chams */
+        if (Features::Chams::createMaterials()) {
+            Log::log(LOG, "Initialised cham materials!");
+        } else {
+            Log::log(ERR, "Failed to create materials!");
+        }
+
         Features::Notifications::addNotification(ImColor(30, 255, 30), "[gs] Successfully injected!");
         Log::log(LOG, "Initialised!");
     }
