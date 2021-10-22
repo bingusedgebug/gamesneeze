@@ -29,4 +29,5 @@ namespace Globals {
 
     inline Player* localPlayer;
     inline QAngle oldViewangles;
+    inline bool firedLast;
 }

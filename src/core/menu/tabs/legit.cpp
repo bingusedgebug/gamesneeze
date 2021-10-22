@@ -67,6 +67,7 @@ void Menu::drawLegitTab() {
                 ImGui::Text("Smoothing");
                 ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
                 ImGui::SliderInt("##Smoothing", &CONFIGINT("Legit>LegitBot>Pistol>Smoothing"), 0, 100);
+                ImGui::Checkbox("Recoil Compensation", &CONFIGBOOL("Legit>LegitBot>Pistol>Recoil Compensation"));
                 ImGui::Checkbox("Aim While Blind", &CONFIGBOOL("Legit>LegitBot>Pistol>Aim While Blind"));
 
                 ImGui::EndTabItem();
@@ -80,6 +81,7 @@ void Menu::drawLegitTab() {
                 ImGui::Text("Smoothing");
                 ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
                 ImGui::SliderInt("##Smoothing", &CONFIGINT("Legit>LegitBot>Heavy Pistol>Smoothing"), 0, 100);
+                ImGui::Checkbox("Recoil Compensation", &CONFIGBOOL("Legit>LegitBot>Heavy Pistol>Recoil Compensation"));
                 ImGui::Checkbox("Aim While Blind", &CONFIGBOOL("Legit>LegitBot>Heavy Pistol>Aim While Blind"));
 
                 ImGui::EndTabItem();
@@ -178,7 +180,7 @@ void Menu::drawLegitTab() {
 
         ImGui::EndChild();
     }
-    ImGui::BeginChild("Backtrack", ImVec2(0, 260), true); {
+    ImGui::BeginChild("Misc", ImVec2(0, 260), true); {
         ImGui::Text("Backtrack");
         ImGui::Separator();
         ImGui::Checkbox("Backtrack", &CONFIGBOOL("Legit>Backtrack>Backtrack"));
@@ -188,6 +190,16 @@ void Menu::drawLegitTab() {
             ImGui::SliderInt("##Backtrack Distance", &CONFIGINT("Legit>Backtrack>Backtrack Distance"), 1, 69);
         }
         ImGui::Checkbox("Simple Forwardtracking", &CONFIGBOOL("Legit>Backtrack>Simple Forwardtracking"));
+        ImGui::Checkbox("Aim NoHit-NoSnap", &CONFIGBOOL("Legit>Misc>NoHitNoSnap"));
+        ImGui::SameLine();
+        ImGui::TextDisabled("?");
+        if (ImGui::IsItemHovered()) 
+            ImGui::SetTooltip("Prevent aimbot with no smooth from snapping unless it can hit!!1!!");
+        if (CONFIGBOOL("Legit>Misc>NoHitNoSnap")) {
+            ImGui::Text("Snap Hitchance");
+            ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+            ImGui::SliderInt("##Snap Hitchance", &CONFIGINT("Legit>Misc>NoHitNoSnap Hitchance"), 1, 100);
+        }
         ImGui::EndChild();
     }
 }

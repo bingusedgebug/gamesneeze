@@ -97,6 +97,7 @@ namespace Features {
         void createMove(CUserCmd *cmd);
     }
     namespace Triggerbot {
+        int getHitChance(QAngle viewAngles);
         void createMove(CUserCmd* cmd);
     }
     namespace RageBot {

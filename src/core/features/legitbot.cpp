@@ -12,20 +12,23 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
             float FOV = CONFIGINT("Legit>LegitBot>Default>FOV")/10.f;
             bool recoilCompensation = CONFIGBOOL("Legit>LegitBot>Default>Recoil Compensation");
             bool aimWhileBlind = CONFIGBOOL("Legit>LegitBot>Default>Aim While Blind");
+            bool semiAuto = false;
 
             if ((std::find(std::begin(pistols), std::end(pistols), weapon->itemIndex() & 0xFFF) != std::end(pistols)) && CONFIGBOOL("Legit>LegitBot>Pistol>Override")) {
                 hitboxes = CONFIGINT("Legit>LegitBot>Pistol>Hitboxes");
                 smoothing = 1.f + (CONFIGINT("Legit>LegitBot>Pistol>Smoothing")/5.f);
                 FOV = CONFIGINT("Legit>LegitBot>Pistol>FOV")/10.f;
-                recoilCompensation = false;
+                recoilCompensation = CONFIGBOOL("Legit>LegitBot>Pistol>Recoil Compensation");
                 aimWhileBlind = CONFIGBOOL("Legit>LegitBot>Pistol>Aim While Blind");
+                semiAuto = true;
             }
             else if ((std::find(std::begin(heavyPistols), std::end(heavyPistols), weapon->itemIndex() & 0xFFF) != std::end(heavyPistols)) && CONFIGBOOL("Legit>LegitBot>Heavy Pistol>Override")) {
                 hitboxes = CONFIGINT("Legit>LegitBot>Heavy Pistol>Hitboxes");
                 smoothing = 1.f + (CONFIGINT("Legit>LegitBot>Heavy Pistol>Smoothing")/5.f);
                 FOV = CONFIGINT("Legit>LegitBot>Heavy Pistol>FOV")/10.f;
-                recoilCompensation = false;
+                recoilCompensation = CONFIGBOOL("Legit>LegitBot>Heavy Pistol>Recoil Compensation");
                 aimWhileBlind = CONFIGBOOL("Legit>LegitBot>Heavy Pistol>Aim While Blind");
+                semiAuto = true;
             }
             else if ((std::find(std::begin(rifles), std::end(rifles), weapon->itemIndex() & 0xFFF) != std::end(rifles)) && CONFIGBOOL("Legit>LegitBot>Rifle>Override")) {
                 hitboxes = CONFIGINT("Legit>LegitBot>Rifle>Hitboxes");
@@ -47,6 +50,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                 FOV = CONFIGINT("Legit>LegitBot>Scout>FOV")/10.f;
                 recoilCompensation = false;
                 aimWhileBlind = CONFIGBOOL("Legit>LegitBot>Scout>Aim While Blind");
+                semiAuto = true;
             }
             else if (((weapon->itemIndex() & 0xFFF) == WEAPON_AWP) && CONFIGBOOL("Legit>LegitBot>AWP>Override")) {
                 hitboxes = CONFIGINT("Legit>LegitBot>AWP>Hitboxes");
@@ -54,6 +58,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                 FOV = CONFIGINT("Legit>LegitBot>AWP>FOV")/10.f;
                 recoilCompensation = false;
                 aimWhileBlind = CONFIGBOOL("Legit>LegitBot>AWP>Aim While Blind");
+                semiAuto = true;
             }
             else if ((std::find(std::begin(heavyWeapons), std::end(heavyWeapons), weapon->itemIndex() & 0xFFF) != std::end(heavyWeapons)) && CONFIGBOOL("Legit>LegitBot>Heavy>Override")) {
                 hitboxes = CONFIGINT("Legit>LegitBot>Heavy>Hitboxes");
@@ -112,6 +117,23 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                             }
                         }
                     }
+                }
+            }
+            if ((smoothing == 1 && CONFIGBOOL("Legit>Misc>NoHitNoSnap"))) {
+                if (cmd->buttons & IN_ATTACK) {
+                    if (semiAuto && Globals::firedLast) return;
+                } else {
+                    if (!(CONFIGBOOL("Legit>Triggerbot>Triggerbot") &&
+                          Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))))
+                        return;
+                }
+                if (Features::Triggerbot::getHitChance(cmd->viewangles + angleToClosestBone) <
+                    CONFIGINT("Legit>Misc>NoHitNoSnap Hitchance")) {
+                    return;
+                }
+                if (CONFIGBOOL("Legit>Triggerbot>Triggerbot") &&
+                    Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))) {
+                    cmd->buttons |= IN_ATTACK;
                 }
             }
             if (((angleToClosestBone) / smoothing).Length() > 0.005f) {  // prevent micro-movements

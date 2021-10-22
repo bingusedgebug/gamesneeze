@@ -79,6 +79,7 @@ namespace Config {
                     CONFIGITEM("Legit>LegitBot>Pistol>Override", false),
                     CONFIGITEM("Legit>LegitBot>Pistol>FOV", 0),
                     CONFIGITEM("Legit>LegitBot>Pistol>Smoothing", 0),
+                    CONFIGITEM("Legit>LegitBot>Pistol>Recoil Compensation", false),
                     CONFIGITEM("Legit>LegitBot>Pistol>Aim While Blind", false),
                 //}
                 // Heavy Pistol {
@@ -86,6 +87,7 @@ namespace Config {
                     CONFIGITEM("Legit>LegitBot>Heavy Pistol>Override", false),
                     CONFIGITEM("Legit>LegitBot>Heavy Pistol>FOV", 0),
                     CONFIGITEM("Legit>LegitBot>Heavy Pistol>Smoothing", 0),
+                    CONFIGITEM("Legit>LegitBot>Heavy Pistol>Recoil Compensation", false),
                     CONFIGITEM("Legit>LegitBot>Heavy Pistol>Aim While Blind", false),
                 //}
                 // Rifle {
@@ -139,6 +141,10 @@ namespace Config {
                 CONFIGITEM("Legit>Triggerbot>Triggerbot", false),
                 CONFIGITEM("Legit>Triggerbot>Head Hitchance", 0),
                 CONFIGITEM("Legit>Triggerbot>Body Hitchance", 0),
+            // }
+            // Misc {
+                CONFIGITEM("Legit>Misc>NoHitNoSnap", false),
+                CONFIGITEM("Legit>Misc>NoHitNoSnap Hitchance", 64),
             // }
         // }
         // RageBot {
