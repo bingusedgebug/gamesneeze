@@ -7,10 +7,11 @@
 namespace Netvar {
     inline std::map<std::pair<std::string_view, std::string_view>, uintptr_t> offsets {
         /* Entity */
+        {std::make_pair("DT_BaseCombatCharacter", "m_flNextAttack"), 0},
         {std::make_pair("DT_BaseEntity", "m_Collision"), 0},
         {std::make_pair("DT_BaseEntity", "m_flSimulationTime"), 0},
         {std::make_pair("DT_BaseEntity", "m_iTeamNum"), 0},
-        {std::make_pair("DT_BaseEntity", "m_bSpotted"), 0},
+        {std::make_pair("DT_BaseEntity", "m_bSpotted"), 0},        
 
         /* Player */
         {std::make_pair("DT_BasePlayer", "m_vecVelocity[0]"), 0},
