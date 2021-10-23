@@ -65,10 +65,11 @@ public:
 		return getVirtualFunc<Fn>(this, 157)(this);
 	}
 
+	NETVAR("DT_BaseCombatCharacter", "m_flNextAttack", nextAttack, float);
 	NETVAR("DT_BaseEntity", "m_Collision", collideable, ICollideable);
 	NETVAR("DT_BaseEntity", "m_flSimulationTime", simtime, float);
 	NETVAR("DT_BaseEntity", "m_iTeamNum", team, int);
-	NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool);
+	NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool);	
 };
 
 class Player : public Entity {

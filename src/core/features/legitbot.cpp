@@ -132,7 +132,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                     return;
                 }
                 if (CONFIGBOOL("Legit>Triggerbot>Triggerbot") &&
-                    Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))) {
+                    Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key")) && !Globals::firedLast) {
                     cmd->buttons |= IN_ATTACK;
                 }
             }

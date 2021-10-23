@@ -18,6 +18,9 @@ int Features::Triggerbot::getHitChance(QAngle viewAngles) {
                                                                       0xFFF);  // GetClientEntityFromHandle is being gay
     if (!weapon) return 0;
 
+    if(Globals::localPlayer->nextAttack() > TICKS_TO_TIME(Globals::localPlayer->tickbase()))
+        return 0;
+
     Vector endPos;
     Trace traceToPlayer;
     int hitchance = 0;
