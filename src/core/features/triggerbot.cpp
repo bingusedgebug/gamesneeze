@@ -1,12 +1,13 @@
-#include "features.hpp"
 #include <vector>
+
+#include "features.hpp"
 
 Entity* findPlayerThatRayHits(Vector start, Vector end, Trace* traceToPlayer) {
     Ray ray;
     ray.Init(start, end);
     TraceFilter filter;
     filter.pSkip = Globals::localPlayer;
-                                    //   hitbox  |  monster  | solid
+    //   hitbox  |  monster  | solid
     Interfaces::trace->TraceRay(ray, (0x40000000 | 0x40000 | 0x1), &filter, traceToPlayer);
 
     return traceToPlayer->m_pEntityHit;
@@ -14,12 +15,12 @@ Entity* findPlayerThatRayHits(Vector start, Vector end, Trace* traceToPlayer) {
 
 int Features::Triggerbot::getHitChance(QAngle viewAngles) {
     if (!Globals::localPlayer) return 0;
-    Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->activeWeapon() &
-                                                                      0xFFF);  // GetClientEntityFromHandle is being gay
+    Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity(
+         (uintptr_t)Globals::localPlayer->activeWeapon() &
+         0xFFF);  // GetClientEntityFromHandle is being gay
     if (!weapon) return 0;
 
-    if(Globals::localPlayer->nextAttack() > TICKS_TO_TIME(Globals::localPlayer->tickbase()))
-        return 0;
+    if (!Globals::localPlayer->canShoot()) return 0;
 
     Vector endPos;
     Trace traceToPlayer;
@@ -27,15 +28,17 @@ int Features::Triggerbot::getHitChance(QAngle viewAngles) {
 
     float spread = RAD2DEG(weapon->GetInaccuracy() + weapon->GetSpread());
     for (int i = 0; i < 100; i++) {
-        QAngle randomSpreadAngle = {randFloat(0, spread) - (spread / 2), randFloat(0, spread) - (spread / 2),
-                                    randFloat(0, spread) - (spread / 2)};
+        QAngle randomSpreadAngle = {randFloat(0, spread) - (spread / 2),
+             randFloat(0, spread) - (spread / 2), randFloat(0, spread) - (spread / 2)};
 
         angleVectors(viewAngles + randomSpreadAngle, endPos);
 
         endPos = Globals::localPlayer->eyePos() + (endPos * 4096);
 
-        Entity* ent = findPlayerThatRayHits(Globals::localPlayer->eyePos(), endPos, &traceToPlayer);
-        if (ent && ent->clientClass()->m_ClassID == CCSPlayer && !ent->dormant() && ((Player*)ent)->isEnemy())
+        Entity* ent =
+             findPlayerThatRayHits(Globals::localPlayer->eyePos(), endPos, &traceToPlayer);
+        if (ent && ent->clientClass()->m_ClassID == CCSPlayer && !ent->dormant() &&
+             ((Player*)ent)->isEnemy() && !((Player*)ent)->hasImmunity())
             hitchance++;
     }
 
@@ -43,12 +46,15 @@ int Features::Triggerbot::getHitChance(QAngle viewAngles) {
 }
 
 void Features::Triggerbot::createMove(CUserCmd* cmd) {
-    if (Globals::localPlayer && CONFIGBOOL("Legit>Triggerbot>Triggerbot") && Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))) {
-        Weapon *weapon = (Weapon *) Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->activeWeapon() & 0xFFF); // GetClientEntityFromHandle is being gay
+    if (Globals::localPlayer && CONFIGBOOL("Legit>Triggerbot>Triggerbot") &&
+         Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key"))) {
+        Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity(
+             (uintptr_t)Globals::localPlayer->activeWeapon() &
+             0xFFF);  // GetClientEntityFromHandle is being gay
         if (weapon) {
             QAngle viewAngles = cmd->viewangles;
             viewAngles += Globals::localPlayer->aimPunch() * 2;
-            
+
             Vector endPos;
             Trace traceToPlayer;
             int headHitchance = 0;
@@ -56,17 +62,18 @@ void Features::Triggerbot::createMove(CUserCmd* cmd) {
 
             float spread = RAD2DEG(weapon->GetInaccuracy() + weapon->GetSpread());
             for (int i = 0; i < 100; i++) {
-                QAngle randomSpreadAngle = {
-                        randFloat(0, spread) - (spread / 2),
-                        randFloat(0, spread) - (spread / 2),
-                        randFloat(0, spread) - (spread / 2)};
-                
-                angleVectors(viewAngles+randomSpreadAngle, endPos);
-                
-                endPos = Globals::localPlayer->eyePos() + (endPos*4096);
+                QAngle randomSpreadAngle = {randFloat(0, spread) - (spread / 2),
+                     randFloat(0, spread) - (spread / 2),
+                     randFloat(0, spread) - (spread / 2)};
 
-                Entity* ent = findPlayerThatRayHits(Globals::localPlayer->eyePos(), endPos, &traceToPlayer);
-                if (ent && ent->clientClass()->m_ClassID == CCSPlayer && !ent->dormant() && ((Player*)ent)->isEnemy()) {
+                angleVectors(viewAngles + randomSpreadAngle, endPos);
+
+                endPos = Globals::localPlayer->eyePos() + (endPos * 4096);
+
+                Entity* ent = findPlayerThatRayHits(
+                     Globals::localPlayer->eyePos(), endPos, &traceToPlayer);
+                if (ent && ent->clientClass()->m_ClassID == CCSPlayer && !ent->dormant() &&
+                     ((Player*)ent)->isEnemy() && !((Player*)ent)->hasImmunity()) {
                     switch (traceToPlayer.hitgroup) {
                         case HITGROUP_HEAD:
                             headHitchance++;
@@ -80,17 +87,19 @@ void Features::Triggerbot::createMove(CUserCmd* cmd) {
                     }
                 }
             }
-            
+
             static bool shotLastTick = false;
-            if (CONFIGINT("Legit>Triggerbot>Head Hitchance") && headHitchance >= CONFIGINT("Legit>Triggerbot>Head Hitchance") && !shotLastTick) {
+            if (CONFIGINT("Legit>Triggerbot>Head Hitchance") &&
+                 headHitchance >= CONFIGINT("Legit>Triggerbot>Head Hitchance") &&
+                 !shotLastTick) {
                 cmd->buttons |= (1 << 0);
                 shotLastTick = true;
-            }
-            else if (CONFIGINT("Legit>Triggerbot>Body Hitchance") && bodyHitchance >= CONFIGINT("Legit>Triggerbot>Body Hitchance") && !shotLastTick) {
+            } else if (CONFIGINT("Legit>Triggerbot>Body Hitchance") &&
+                 bodyHitchance >= CONFIGINT("Legit>Triggerbot>Body Hitchance") &&
+                 !shotLastTick) {
                 cmd->buttons |= (1 << 0);
                 shotLastTick = true;
-            }
-            else {
+            } else {
                 shotLastTick = false;
             }
         }

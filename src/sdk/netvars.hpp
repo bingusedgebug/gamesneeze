@@ -35,6 +35,7 @@ namespace Netvar {
         {std::make_pair("DT_CSPlayer", "m_ArmorValue"), 0},
         {std::make_pair("DT_BaseEntity", "m_nRenderMode"), 0}, // Used for movetype
         {std::make_pair("DT_CSPlayer", "m_nSurvivalTeam"), 0},
+        {std::make_pair("DT_CSPlayer", "m_bGunGameImmunity"), 0},
 
         /* Item */
         {std::make_pair("DT_BaseAttributableItem", "m_iItemDefinitionIndex"), 0},
@@ -47,6 +48,9 @@ namespace Netvar {
         {std::make_pair("DT_BaseCombatWeapon", "m_nFallbackPaintKit"), 0},
         {std::make_pair("DT_BaseCombatWeapon", "m_flFallbackWear"), 0},
         {std::make_pair("DT_BaseCombatWeapon", "m_nFallbackStatTrak"), 0},
+        {std::make_pair("DT_BaseCombatWeapon", "m_iClip1"), 0},
+        {std::make_pair("DT_BaseCombatWeapon", "m_flNextPrimaryAttack"), 0},
+        {std::make_pair("DT_WeaponCSBase", "m_flPostponeFireReadyTime"), 0},
 
         /* Bomb */
         {std::make_pair("DT_PlantedC4", "m_flC4Blow"), 0},
