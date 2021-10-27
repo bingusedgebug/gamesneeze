@@ -8,7 +8,7 @@ bool Player::isEnemy() { // team check that accounts for dangerzone teams and ff
         return (Globals::localPlayer->survivalTeam() == -1) ? true : (Globals::localPlayer->survivalTeam() != this->survivalTeam());
     }
     static ConVar *mp_teammates_are_enemies = Interfaces::convar->FindVar("mp_teammates_are_enemies");
-	return this->team() != Globals::localPlayer->team() || mp_teammates_are_enemies->GetInt();
+	return this->team() != Globals::localPlayer->team() || mp_teammates_are_enemies->GetInt() != 0;
 }
 
 bool visCheck(Player* player) {
@@ -128,4 +128,20 @@ bool Player::visible() {
         return playerCache[index()].visible;
     }
     return false;
+}
+
+bool Player::canShoot() {
+    const float serverTime = TICKS_TO_TIME(this->tickbase());
+    Weapon* weapon =
+         (Weapon*)Interfaces::entityList->GetClientEntity((uintptr_t)this->activeWeapon() &
+              0xFFF);  // GetClientEntityFromHandle is being gay
+    if (!weapon) return false;
+    if (!weapon->ammo()) return false;
+    if (this->nextAttack() > serverTime) return false;
+    if (weapon->nextPrimaryAttack() > serverTime) return false;
+    if (weapon->itemIndex() == ItemIndex::WEAPON_REVOLVER &&
+         weapon->fireReadyTime() > serverTime)
+        return false;
+
+    return true;
 }

@@ -94,6 +94,7 @@ public:
 	NETVAR("DT_CSPlayer", "m_bHasHelmet", helmet, bool);
 	NETVAR("DT_CSPlayer", "m_ArmorValue", armor, int);
 	NETVAR("DT_CSPlayer", "m_nSurvivalTeam", survivalTeam, int);
+	NETVAR("DT_CSPlayer", "m_bGunGameImmunity", hasImmunity, bool);
 
 	AnimState* animState() {
 		return *reinterpret_cast<AnimState **>((uintptr_t)
@@ -133,6 +134,7 @@ public:
 	bool getAnythingBones(matrix3x4_t* boneMatrix);
 	Vector getBonePos(int bone);
 	bool visible();
+	bool canShoot();
 };
 
 class Item : public Entity{
@@ -149,6 +151,9 @@ public:
 	NETVAR("DT_BaseCombatWeapon", "m_nFallbackPaintKit", paintKit, int);
 	NETVAR("DT_BaseCombatWeapon", "m_flFallbackWear", wear, float);
 	NETVAR("DT_BaseCombatWeapon", "m_nFallbackStatTrak", statTrack, int);
+	NETVAR("DT_BaseCombatWeapon", "m_iClip1", ammo, int);
+    NETVAR("DT_BaseCombatWeapon", "m_flNextPrimaryAttack", nextPrimaryAttack, float);
+    NETVAR("DT_WeaponCSBase", "m_flPostponeFireReadyTime", fireReadyTime, float);
 
 	float GetSpread() {
 		typedef float (*Fn)(void*);
