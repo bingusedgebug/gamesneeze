@@ -125,6 +125,14 @@ void Menu::drawMiscTab() {
                     ImGui::SameLine();
                 }
                 ImGui::Checkbox("EdgeBug", &CONFIGBOOL("Misc>Misc>Movement>EdgeBug"));
+                if (CONFIGBOOL("Misc>Misc>Movement>EdgeBug")) {
+                    ImGui::Text("EdgeBug TotalPredCap");
+                    ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                    ImGui::SliderInt("##Edgebug TotalPredCap", &CONFIGINT("Misc>Misc>Movement>EdgeBug TotalPredCap"), 1, 256);
+                    ImGui::Text("EdgeBug SinglePredCap");
+                    ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                    ImGui::SliderInt("##Edgebug SinglePredCap", &CONFIGINT("Misc>Misc>Movement>EdgeBug SinglePredCap"), 1, 256);
+                }
                 ImGui::Checkbox("Fast Duck", &CONFIGBOOL("Misc>Misc>Movement>Fast Duck"));
                 ImGui::SameLine();
                 ImGui::TextDisabled("?");

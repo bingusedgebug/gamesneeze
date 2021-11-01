@@ -90,12 +90,12 @@ void Features::Movement::postPredCreateMove(CUserCmd *cmd) {
 }
 
 void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
-    if (!shouldEdgebug &&
-         (!CONFIGBOOL("Misc>Misc>Movement>EdgeBug") ||
-              !Menu::CustomWidgets::isKeyDown(
-                   CONFIGINT("Misc>Misc>Movement>EdgeBug Key")) ||
-              !Globals::localPlayer->health()))
+    if (!CONFIGBOOL("Misc>Misc>Movement>EdgeBug") ||
+         !Menu::CustomWidgets::isKeyDown(CONFIGINT("Misc>Misc>Movement>EdgeBug Key")) ||
+         !Globals::localPlayer->health()) {
+        shouldEdgebug = false;
         return;
+    }
 
     struct MovementVars {
         QAngle viewangles;
@@ -115,16 +115,30 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
 
     int nCmdsPred = Interfaces::prediction->Split->nCommandsPredicted;
 
-    int predictAmount = 128;  // TODO: make amount configurable
-    for (int t = 0; t < 4; t++) {
+    int predCound = 0;
+    int predCap = CONFIGINT("Misc>Misc>Movement>EdgeBug TotalPredCap");
+    float lastGroundHeight = Globals::localPlayer->origin().z;
+    int searchDir = 0;
+    int lastPredGround = 0;
+    int predictAmount = CONFIGINT("Misc>Misc>Movement>EdgeBug SinglePredCap");
+    for (int t = 0; predCound < predCap; t++) {
         Features::Prediction::restoreEntityToPredictedFrame(nCmdsPred - 1);
 
-        bool doStrafe = (t % 2 == 0);
-        bool doDuck = t > 1;
+        static int lastType = 0;
+        if(shouldEdgebug)
+            t = lastType;
+        
+        bool doStrafe = (t % 2 == 0) || t > 3;
+        bool doDuck = t > 1 && t < 4;
+        if(t > 3) {
+            if(lastPredGround < 2)
+                break;
+            backup_move.view_delta += (backup_move.view_delta/2) * searchDir;
+        }
 
         cmd->viewangles = backup_move.viewangles;
 
-        for (int i = 0; i < predictAmount; i++) {
+        for (int i = 0; i < predictAmount && predCound < predCap; i++) {
             if (doStrafe) {
                 cmd->viewangles += backup_move.view_delta;
                 cmd->forwardmove = backup_move.forwardmove;
@@ -143,11 +157,25 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
             velBackup = Globals::localPlayer->velocity();
             edgebugPos = Globals::localPlayer->origin();
             Features::Prediction::end();
-            if (Globals::localPlayer->flags() & FL_ONGROUND ||
-                 Globals::localPlayer->moveType() == MOVETYPE_LADDER) {
+            predCound++;
+            if(t > 3 && Globals::localPlayer->origin().z < lastGroundHeight) {
+                searchDir = -1;
                 break;
             }
+            if (Globals::localPlayer->flags() & FL_ONGROUND) {
+                if(t > 3 || t == 1)
+                    searchDir = Globals::localPlayer->origin().z < lastGroundHeight ? -1 : 1;
+                lastGroundHeight = Globals::localPlayer->origin().z;
+                lastPredGround = i;
+                break;
+            }
+            if(Globals::localPlayer->moveType() == MOVETYPE_LADDER)
+                break;
             if (shouldEdgebug) {
+                if(t < 4)
+                    lastType = t;
+                else
+                    lastType = 0;
                 shouldDuckNext = doDuck;
                 if (doStrafe) {
                     cmd->viewangles = backup_move.viewangles + backup_move.view_delta;
