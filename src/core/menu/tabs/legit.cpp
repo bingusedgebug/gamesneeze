@@ -235,7 +235,7 @@ void Menu::drawLegitTab() {
     }
     ImGui::BeginChild("Misc", ImVec2(0, 260), true);
     {
-        ImGui::Text("Backtrack");
+        ImGui::Text("Misc");
         ImGui::Separator();
         ImGui::Checkbox("Backtrack", &CONFIGBOOL("Legit>Backtrack>Backtrack"));
         if (CONFIGBOOL("Legit>Backtrack>Backtrack")) {
@@ -258,6 +258,8 @@ void Menu::drawLegitTab() {
             ImGui::SliderInt("##Snap Hitchance",
                  &CONFIGINT("Legit>Misc>NoHitNoSnap Hitchance"), 1, 100);
         }
+        ImGui::Checkbox(
+                     "Globally Disable Aimbot", &CONFIGBOOL("Legit>Misc>DisableAimbot"));
         ImGui::EndChild();
     }
 }

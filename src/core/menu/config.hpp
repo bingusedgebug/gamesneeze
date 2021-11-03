@@ -154,6 +154,7 @@ inline std::unordered_map<std::string_view, ConfigItem> config {
      // Misc {
      CONFIGITEM("Legit>Misc>NoHitNoSnap", false),
      CONFIGITEM("Legit>Misc>NoHitNoSnap Hitchance", 64),
+     CONFIGITEM("Legit>Misc>DisableAimbot", false),
      // }
      // }
      // RageBot {

@@ -70,6 +70,7 @@ public:
 	NETVAR("DT_BaseEntity", "m_flSimulationTime", simtime, float);
 	NETVAR("DT_BaseEntity", "m_iTeamNum", team, int);
 	NETVAR("DT_BaseEntity", "m_bSpotted", spotted, bool);	
+	NETVAR("DT_BaseViewModel", "m_nModelIndex", modelIndex, int);	
 };
 
 class Player : public Entity {
@@ -95,6 +96,7 @@ public:
 	NETVAR("DT_CSPlayer", "m_ArmorValue", armor, int);
 	NETVAR("DT_CSPlayer", "m_nSurvivalTeam", survivalTeam, int);
 	NETVAR("DT_CSPlayer", "m_bGunGameImmunity", hasImmunity, bool);
+	NETVAR("DT_BasePlayer", "m_hViewModel[0]", viewmodel, void*);
 
 	AnimState* animState() {
 		return *reinterpret_cast<AnimState **>((uintptr_t)

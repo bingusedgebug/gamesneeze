@@ -29,6 +29,13 @@ void Features::SkinChanger::frameStageNotify(FrameStage frame) {
                 *weapon->paintKit_ptr() = paintkit;
                 *weapon->wear_ptr() = wear;
                 *weapon->statTrack_ptr() = statTrack;
+                if(weapon->clientClass()->m_ClassID == CKnife) {
+                    *weapon->modelIndex_ptr() = Interfaces::modelInfo->GetModelIndex("models/weapons/v_knife_css.mdl");
+                    *weapon->itemIndex_ptr() = WEAPON_KNIFE_CSS;
+                    Entity *viewmodel = (Entity *) Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->viewmodel() & 0xFFF);
+                    if(!viewmodel) return;
+                    *viewmodel->modelIndex_ptr() = Interfaces::modelInfo->GetModelIndex("models/weapons/v_knife_css.mdl");
+                }
             }
         } catch (std::out_of_range& e) {
             //Log::log(WARN, "itemDefinitionIndex %d not found!", ((Weapon*)ent)->itemIndex());

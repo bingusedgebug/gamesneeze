@@ -123,6 +123,7 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
     int predictAmount = CONFIGINT("Misc>Misc>Movement>EdgeBug SinglePredCap");
     for (int t = 0; predCound < predCap; t++) {
         Features::Prediction::restoreEntityToPredictedFrame(nCmdsPred - 1);
+        velBackup = Globals::localPlayer->velocity();
 
         static int lastType = 0;
         if(shouldEdgebug)

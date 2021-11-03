@@ -10,6 +10,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                   Menu::CustomWidgets::isKeyDown(CONFIGINT("Legit>Triggerbot>Key")))) &&
          Interfaces::engine->IsInGame() && Globals::localPlayer &&
          Globals::localPlayer->health() > 0) {
+        if(CONFIGBOOL("Legit>Misc>DisableAimbot")) return;
         Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity(
              (uintptr_t)Globals::localPlayer->activeWeapon() &
              0xFFF);  // GetClientEntityFromHandle is being gay
@@ -23,7 +24,7 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
             bool distanceFOV = CONFIGBOOL("Legit>LegitBot>Default>Distance FOV");
             bool semiAuto = false;
             
-            if(weapon->itemIndex() == ItemIndex::WEAPON_KNIFE) return;
+            if(weapon->clientClass()->m_ClassID == CKnife) return;
 
             if ((std::find(std::begin(pistols), std::end(pistols),
                       weapon->itemIndex() & 0xFFF) != std::end(pistols)) &&

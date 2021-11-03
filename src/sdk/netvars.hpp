@@ -12,6 +12,7 @@ namespace Netvar {
         {std::make_pair("DT_BaseEntity", "m_flSimulationTime"), 0},
         {std::make_pair("DT_BaseEntity", "m_iTeamNum"), 0},
         {std::make_pair("DT_BaseEntity", "m_bSpotted"), 0},        
+        {std::make_pair("DT_BaseViewModel", "m_nModelIndex"), 0},        
 
         /* Player */
         {std::make_pair("DT_BasePlayer", "m_vecVelocity[0]"), 0},
@@ -36,6 +37,7 @@ namespace Netvar {
         {std::make_pair("DT_BaseEntity", "m_nRenderMode"), 0}, // Used for movetype
         {std::make_pair("DT_CSPlayer", "m_nSurvivalTeam"), 0},
         {std::make_pair("DT_CSPlayer", "m_bGunGameImmunity"), 0},
+        {std::make_pair("DT_BasePlayer", "m_hViewModel[0]"), 0},
 
         /* Item */
         {std::make_pair("DT_BaseAttributableItem", "m_iItemDefinitionIndex"), 0},
