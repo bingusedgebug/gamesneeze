@@ -113,11 +113,13 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
     original_move.buttons = cmd->buttons;
     if (!shouldEdgebug) backup_move = original_move;
 
+    QAngle curAngles;
+
     int nCmdsPred = Interfaces::prediction->Split->nCommandsPredicted;
 
     int predCound = 0;
     int predCap = CONFIGINT("Misc>Misc>Movement>EdgeBug TotalPredCap");
-    float lastGroundHeight = Globals::localPlayer->origin().z;
+    float highestGround = 0.f;
     int searchDir = 0;
     int lastPredGround = 0;
     int predictAmount = CONFIGINT("Misc>Misc>Movement>EdgeBug SinglePredCap");
@@ -129,21 +131,28 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
         if(shouldEdgebug)
             t = lastType;
         
-        bool doStrafe = (t % 2 == 0) || t > 3;
-        bool doDuck = t > 1 && t < 4;
+        bool doStrafe = t < 2 || t > 3;
+        bool doDuck = t == 1 || t == 3;
         if(t > 3) {
             if(lastPredGround < 2)
                 break;
             backup_move.view_delta += (backup_move.view_delta/2) * searchDir;
         }
 
-        cmd->viewangles = backup_move.viewangles;
+        //cmd->viewangles = backup_move.viewangles;
+        curAngles = backup_move.viewangles;
 
         for (int i = 0; i < predictAmount && predCound < predCap; i++) {
             if (doStrafe) {
-                cmd->viewangles += backup_move.view_delta;
+                //cmd->viewangles += backup_move.view_delta;
+                curAngles += backup_move.view_delta;
                 cmd->forwardmove = backup_move.forwardmove;
                 cmd->sidemove = backup_move.sidemove;
+                auto viewbackup = cmd->viewangles;
+                cmd->viewangles = curAngles;
+                startMovementFix(cmd);
+                cmd->viewangles = viewbackup;
+                endMovementFix(cmd);
             } else {
                 cmd->forwardmove = 0.f;
                 cmd->sidemove = 0.f;
@@ -159,14 +168,22 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
             edgebugPos = Globals::localPlayer->origin();
             Features::Prediction::end();
             predCound++;
-            if(t > 3 && Globals::localPlayer->origin().z < lastGroundHeight) {
+            if(!shouldEdgebug && t > 3 && Globals::localPlayer->origin().z < highestGround) {
                 searchDir = -1;
                 break;
             }
             if (Globals::localPlayer->flags() & FL_ONGROUND) {
-                if(t > 3 || t == 1)
-                    searchDir = Globals::localPlayer->origin().z < lastGroundHeight ? -1 : 1;
-                lastGroundHeight = Globals::localPlayer->origin().z;
+                if(t == 0)
+                    highestGround = Globals::localPlayer->origin().z;
+                if(t == 2)
+                    searchDir = Globals::localPlayer->origin().z < highestGround ? -1 : 1;
+                if(t > 3) {
+                    searchDir = 1;
+                    if(Globals::localPlayer->origin().z < highestGround)
+                        searchDir = -1;
+                    else
+                        highestGround = Globals::localPlayer->origin().z;
+                }
                 lastPredGround = i;
                 break;
             }
@@ -179,6 +196,8 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
                     lastType = 0;
                 shouldDuckNext = doDuck;
                 if (doStrafe) {
+                    cmd->forwardmove = backup_move.forwardmove;
+                    cmd->sidemove = backup_move.sidemove;
                     cmd->viewangles = backup_move.viewangles + backup_move.view_delta;
                     backup_move.viewangles = cmd->viewangles;
                 }
