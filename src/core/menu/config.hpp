@@ -62,7 +62,7 @@ class ConfigItem {
     ImColor colValue = ImColor(255, 255, 255, 255);
 };
 
-inline std::unordered_map<std::string_view, ConfigItem> config {
+inline std::unordered_map<std::string_view, ConfigItem> config{
      // Legit {
      // LegitBot {
      // Default {
@@ -138,7 +138,6 @@ inline std::unordered_map<std::string_view, ConfigItem> config {
      //}
      // }
 
-
      // Backtrack {
      CONFIGITEM("Legit>Backtrack>Backtrack", false),
      CONFIGITEM("Legit>Backtrack>Backtrack Distance", 69),
@@ -152,9 +151,14 @@ inline std::unordered_map<std::string_view, ConfigItem> config {
      CONFIGITEM("Legit>Triggerbot>Magnet", false),
      // }
      // Misc {
+     CONFIGITEM("Legit>Misc>ShowExtraAimOptions", false),
      CONFIGITEM("Legit>Misc>NoHitNoSnap", false),
      CONFIGITEM("Legit>Misc>NoHitNoSnap Hitchance", 64),
      CONFIGITEM("Legit>Misc>DisableAimbot", false),
+     CONFIGITEM("Legit>Misc>MouseMoveCheck", false),
+     CONFIGITEM("Legit>Misc>MouseMoveCheckTime", 50),
+     CONFIGITEM("Legit>Misc>NonSticky", false), CONFIGITEM("Legit>Misc>NonStickyMinFOV", 0),
+     CONFIGITEM("Legit>Misc>KillDelay", false), CONFIGITEM("Legit>Misc>KillDelayTime", 227),
      // }
      // }
      // RageBot {
@@ -301,6 +305,10 @@ inline std::unordered_map<std::string_view, ConfigItem> config {
      CONFIGITEM("Visuals>World>World>Nightmode", 0),
      CONFIGITEM("Visuals>World>World>Skybox", 0), CONFIGITEM("Visuals>World>World>FOV", 90),
      CONFIGITEM("Visuals>World>World>Viewmodel FOV", 0),
+     CONFIGITEM("Visuals>World>World>ViewmodelXYZ", false),
+     CONFIGITEM("Visuals>World>World>Viewmodel X", 0),
+     CONFIGITEM("Visuals>World>World>Viewmodel Y", 0),
+     CONFIGITEM("Visuals>World>World>Viewmodel Z", 0),
      CONFIGITEM("Visuals>World>World>Third Person", false),
      CONFIGITEM("Visuals>World>World>No Flash", false),
      CONFIGITEM("Visuals>World>World>No Flash Amount", 0),

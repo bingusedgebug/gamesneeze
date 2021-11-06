@@ -146,4 +146,7 @@ namespace Features {
         void edgeBugPredictor(CUserCmd* cmd);
         void draw();
     }
+    namespace ViewModelXYZ {
+        void createMove();
+    }
 }

@@ -5,7 +5,7 @@
 float Hooks::GetViewmodelFOV::hook(void* thisptr) {
     if (CONFIGINT("Visuals>World>World>Viewmodel FOV") != 0) {
         if (Globals::localPlayer && Globals::localPlayer->health() > 0) {
-            return CONFIGINT("Visuals>World>World>Viewmodel FOV");
+            return (CONFIGINT("Visuals>World>World>Viewmodel FOV") / 90.f * (90 - CONFIGINT("Visuals>World>World>FOV") + 90));
         }
     }
 

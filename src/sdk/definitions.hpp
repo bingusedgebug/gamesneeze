@@ -933,6 +933,11 @@ public:
 		return false;
 	}
 
+	void SetSize(int iSize)
+	{
+		this->iSize = iSize;
+	}
+
 protected:
 	CAllocator pMemory;
 	int iSize;

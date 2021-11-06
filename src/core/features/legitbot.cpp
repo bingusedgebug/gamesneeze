@@ -11,6 +11,20 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
          Interfaces::engine->IsInGame() && Globals::localPlayer &&
          Globals::localPlayer->health() > 0) {
         if(CONFIGBOOL("Legit>Misc>DisableAimbot")) return;
+        static float lastMouseTime = Interfaces::globals->curtime;
+        static Vector2D lastNzMouseDelta = Vector2D(cmd->mousedx, cmd->mousedy);
+        if(cmd->mousedx || cmd->mousedy) lastNzMouseDelta = Vector2D(cmd->mousedx, cmd->mousedy);
+        if(cmd->mousedx || cmd->mousedy)
+            lastMouseTime = Interfaces::globals->curtime;
+        if (CONFIGBOOL("Legit>Misc>MouseMoveCheck") &&
+             lastMouseTime + (CONFIGINT("Legit>Misc>MouseMoveCheckTime") / 1000.f) <
+                  Interfaces::globals->curtime &&
+             !(cmd->buttons & IN_ATTACK))
+            return;
+        if (CONFIGBOOL("Legit>Misc>KillDelay") &&
+             Globals::lastKillTime + (CONFIGINT("Legit>Misc>KillDelayTime") / 1000.f) >
+                  Interfaces::globals->curtime)
+            return;
         Weapon* weapon = (Weapon*)Interfaces::entityList->GetClientEntity(
              (uintptr_t)Globals::localPlayer->activeWeapon() &
              0xFFF);  // GetClientEntityFromHandle is being gay
@@ -186,6 +200,14 @@ void Features::LegitBot::createMove(CUserCmd* cmd) {
                      !(semiAuto && Globals::firedLast)) {
                     cmd->buttons |= IN_ATTACK;
                 }
+            } else if (CONFIGBOOL("Legit>Misc>NonSticky") && !(cmd->buttons & IN_ATTACK) &&
+                 (angleToClosestBone.Length() >
+                      CONFIGINT("Legit>Misc>NonStickyMinFOV") / 10.f) &&
+                 ((angleToClosestBone.y > 0 && lastNzMouseDelta.x > 0) ||
+                      ((angleToClosestBone.y < 0 && lastNzMouseDelta.x < 0)) ||
+                      (angleToClosestBone.x < 0 && lastNzMouseDelta.y > 0) ||
+                      ((angleToClosestBone.x > 0 && lastNzMouseDelta.y < 0)))) {
+                return;
             }
             if (((angleToClosestBone) / smoothing).Length() >
                  0.005f) {  // prevent micro-movements

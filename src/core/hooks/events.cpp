@@ -59,6 +59,8 @@ void Hooks::Events::EventListener::FireGameEvent(IGameEvent *event) {
             player_info_t info;
             Interfaces::engine->GetPlayerInfo(victim->index(), &info);
 
+            Globals::lastKillTime = Interfaces::globals->curtime;
+
             if (CONFIGBOOL("Misc>Misc>Hitmarkers>Hitlogs")) {
                 Features::Notifications::addNotification(ImColor(220, 40, 40), "[gs] killed %s", info.name);
             }

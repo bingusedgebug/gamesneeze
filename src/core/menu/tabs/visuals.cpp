@@ -217,6 +217,18 @@ void Menu::drawVisualsTab() {
                 ImGui::Text("Viewmodel FOV");
                 ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
                 ImGui::SliderInt("##Viewmodel FOV", &CONFIGINT("Visuals>World>World>Viewmodel FOV"), 0, 130);
+                ImGui::Checkbox("Viewmodel XYZ", &CONFIGBOOL("Visuals>World>World>ViewmodelXYZ"));
+                if(CONFIGBOOL("Visuals>World>World>ViewmodelXYZ")) {
+                    ImGui::Text("Viewmodel X (x10)");
+                    ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                    ImGui::SliderInt("##Viewmodel X", &CONFIGINT("Visuals>World>World>Viewmodel X"), -50, 50);
+                    ImGui::Text("Viewmodel Y (x10)");
+                    ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                    ImGui::SliderInt("##Viewmodel Y", &CONFIGINT("Visuals>World>World>Viewmodel Y"), -50, 50);
+                    ImGui::Text("Viewmodel Z (x10)");
+                    ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                    ImGui::SliderInt("##Viewmodel Z", &CONFIGINT("Visuals>World>World>Viewmodel Z"), -50, 50);
+                }
                 ImGui::Checkbox("Third Person", &CONFIGBOOL("Visuals>World>World>Third Person"));
                 ImGui::Checkbox("No Flash", &CONFIGBOOL("Visuals>World>World>No Flash"));
                 ImGui::Text("Flash Amount");

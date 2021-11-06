@@ -246,20 +246,46 @@ void Menu::drawLegitTab() {
         }
         ImGui::Checkbox("Simple Forwardtracking",
              &CONFIGBOOL("Legit>Backtrack>Simple Forwardtracking"));
-        ImGui::Checkbox("Aim NoHit-NoSnap", &CONFIGBOOL("Legit>Misc>NoHitNoSnap"));
-        ImGui::SameLine();
-        ImGui::TextDisabled("?");
-        if (ImGui::IsItemHovered())
-            ImGui::SetTooltip(
-                 "Prevent aimbot with no smooth from snapping unless it can hit!!1!!");
-        if (CONFIGBOOL("Legit>Misc>NoHitNoSnap")) {
-            ImGui::Text("Snap Hitchance");
-            ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
-            ImGui::SliderInt("##Snap Hitchance",
-                 &CONFIGINT("Legit>Misc>NoHitNoSnap Hitchance"), 1, 100);
-        }
         ImGui::Checkbox(
-                     "Globally Disable Aimbot", &CONFIGBOOL("Legit>Misc>DisableAimbot"));
+             "Show Extra Aim Options", &CONFIGBOOL("Legit>Misc>ShowExtraAimOptions"));
+        if (CONFIGBOOL("Legit>Misc>ShowExtraAimOptions")) {
+            ImGui::Checkbox("Aim NoHit-NoSnap", &CONFIGBOOL("Legit>Misc>NoHitNoSnap"));
+            ImGui::SameLine();
+            ImGui::TextDisabled("?");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip(
+                     "Prevent aimbot with no smooth from snapping unless it can hit!!1!!");
+            if (CONFIGBOOL("Legit>Misc>NoHitNoSnap")) {
+                ImGui::Text("Snap Hitchance");
+                ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                ImGui::SliderInt("##Snap Hitchance",
+                     &CONFIGINT("Legit>Misc>NoHitNoSnap Hitchance"), 1, 100);
+            }
+            ImGui::Checkbox(
+                 "Globally Disable Aimbot", &CONFIGBOOL("Legit>Misc>DisableAimbot"));
+            ImGui::Checkbox(
+                 "Aim Mouse Move Check", &CONFIGBOOL("Legit>Misc>MouseMoveCheck"));
+            if (CONFIGBOOL("Legit>Misc>MouseMoveCheck")) {
+                ImGui::Text("Aim Mouse Move Check Time (ms)");
+                ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                ImGui::SliderInt("##Mouse Move Check Time",
+                     &CONFIGINT("Legit>Misc>MouseMoveCheckTime"), 1, 500);
+            }
+            ImGui::Checkbox("Non Stickyish", &CONFIGBOOL("Legit>Misc>NonSticky"));
+            if (CONFIGBOOL("Legit>Misc>NonSticky")) {
+                ImGui::Text("Non Sticky Min FOV (x10)");
+                ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                ImGui::SliderInt("##Non Sticky Min FOV",
+                     &CONFIGINT("Legit>Misc>NonStickyMinFOV"), 0, 1800);
+            }
+            ImGui::Checkbox("Aim Kill Delay", &CONFIGBOOL("Legit>Misc>KillDelay"));
+            if (CONFIGBOOL("Legit>Misc>KillDelay")) {
+                ImGui::Text("Aim Kill Delay Time (ms)");
+                ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
+                ImGui::SliderInt(
+                     "##Kill Delay Time", &CONFIGINT("Legit>Misc>KillDelayTime"), 1, 300);
+            }
+        }
         ImGui::EndChild();
     }
 }

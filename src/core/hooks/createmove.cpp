@@ -17,6 +17,7 @@ bool Hooks::CreateMove::hook(void* thisptr, float flInputSampleTime, CUserCmd* c
             if (mat_postprocess_enable) {
                 mat_postprocess_enable->SetValue(!CONFIGBOOL("Misc>Misc>Misc>Disable Post Processing"));
             }
+            Features::ViewModelXYZ::createMove();
         }
 
         startMovementFix(cmd);

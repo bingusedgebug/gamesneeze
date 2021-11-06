@@ -83,8 +83,8 @@ void Features::Backtrack::createMove(CUserCmd *cmd) {
     if (CONFIGBOOL("Legit>Backtrack>Backtrack") && cmd->tick_count != 0 && Interfaces::engine->IsInGame() &&
         Globals::localPlayer) {
         // Find how far we should backtrack in this tick
-        QAngle viewAngles;
-        Interfaces::engine->GetViewAngles(viewAngles);
+        QAngle viewAngles = cmd->viewangles;
+        //Interfaces::engine->GetViewAngles(viewAngles);
         viewAngles += Globals::localPlayer->aimPunch() * 2;
 
         float closestDelta = FLT_MAX;
