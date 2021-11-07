@@ -149,6 +149,14 @@ void Menu::drawMiscTab() {
 
         if (ImGui::BeginTabItem("Skins")) {
             static ItemIndex curWeaponSelected = ItemIndex::WEAPON_AK47;
+            if (Interfaces::engine->IsInGame() && Globals::localPlayer && Globals::localPlayer->health()) {
+                Weapon* curWeapon =
+                     (Weapon*)Interfaces::entityList->GetClientEntity((uintptr_t)Globals::localPlayer->activeWeapon() & 0xFFF);
+                if (curWeapon && curWeapon->itemIndex() != ItemIndex::INVALID) {
+                    curWeaponSelected = curWeapon->itemIndex();
+                    Log::log(LOG, "current weapon itemIndex = %i", curWeapon->itemIndex());
+                }
+            }
             if (ImGui::BeginCombo("Weapon", itemIndexMap.at(curWeaponSelected))) {
                 for (auto item : itemIndexMap) {
                     if (item.first != ItemIndex::INVALID) {

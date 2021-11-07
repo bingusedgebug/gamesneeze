@@ -330,7 +330,7 @@ enum EClassIds {
 	SporeTrail,
 };
 
-enum ItemIndex {
+enum ItemIndex : short {
 	INVALID = -1,
 	WEAPON_NONE = 0,
 	WEAPON_DEAGLE,

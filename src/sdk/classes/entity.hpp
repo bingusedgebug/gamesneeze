@@ -83,6 +83,7 @@ public:
 	NETVAR("DT_BasePlayer", "m_aimPunchAngle", aimPunch, QAngle);
 	NETVAR("DT_BasePlayer", "m_viewPunchAngle", viewPunch, QAngle);
 	NETVAR("DT_CSPlayer", "m_hActiveWeapon", activeWeapon, void*);
+	NETVAR("DT_BaseCombatCharacter", "m_hMyWeapons", getWeapons, int);
 	NETVAR("DT_CSPlayer", "m_hObserverTarget", observerTarget, Player*);
 	NETVAR("DT_CSPlayer", "m_bHasDefuser", defuser, bool);
 	NETVAR("DT_BasePlayer", "m_vecViewOffset[0]", viewOffset, Vector);

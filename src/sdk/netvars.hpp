@@ -23,6 +23,7 @@ namespace Netvar {
         {std::make_pair("DT_BasePlayer", "m_aimPunchAngle"), 0},
         {std::make_pair("DT_BasePlayer", "m_viewPunchAngle"), 0},
         {std::make_pair("DT_CSPlayer", "m_hActiveWeapon"), 0},
+        {std::make_pair("DT_BaseCombatCharacter", "m_hMyWeapons"), 0},
         {std::make_pair("DT_CSPlayer", "m_hObserverTarget"), 0},
         {std::make_pair("DT_CSPlayer", "m_bHasDefuser"), 0},
         {std::make_pair("DT_BasePlayer", "m_vecViewOffset[0]"), 0},
