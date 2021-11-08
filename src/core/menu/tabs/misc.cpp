@@ -133,6 +133,7 @@ void Menu::drawMiscTab() {
                     ImGui::SetNextItemWidth(ImGui::GetWindowContentRegionWidth());
                     ImGui::SliderInt("##Edgebug SinglePredCap", &CONFIGINT("Misc>Misc>Movement>EdgeBug SinglePredCap"), 1, 256);
                 }
+                ImGui::Checkbox("Rage AutoStrafe (blatant)", &CONFIGBOOL("Misc>Misc>Movement>RageAutoStrafe"));
                 ImGui::Checkbox("Fast Duck", &CONFIGBOOL("Misc>Misc>Movement>Fast Duck"));
                 ImGui::SameLine();
                 ImGui::TextDisabled("?");

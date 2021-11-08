@@ -144,6 +144,7 @@ namespace Features {
         void prePredCreateMove(CUserCmd* cmd);
         void postPredCreateMove(CUserCmd* cmd);
         void edgeBugPredictor(CUserCmd* cmd);
+        void rageAutoStrafe(CUserCmd* cmd);
         void draw();
     }
     namespace ViewModelXYZ {

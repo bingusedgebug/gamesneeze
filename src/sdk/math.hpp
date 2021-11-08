@@ -74,6 +74,22 @@ inline void angleVectors(const QAngle &angles, Vector& forward) {
 	forward.z = -sin(DEG2RAD(angles.x));
 }
 
+inline void vectorAngles(const Vector& vec, QAngle& angles) {
+    float pitch, yaw;
+    if (!(vec.x || vec.y)) {
+        pitch = vec.z > 0 ? 270.f : 90.f;
+        yaw = 0.f;
+    } else {
+        pitch = atan2f(-vec.z, vec.Length2D()) * 180.f / M_PI;
+        if (pitch < 0.f) pitch += 360.f;
+        yaw = atan2f(vec.y, vec.x) * 180.f / M_PI;
+        if (yaw < 0.f) yaw += 360.f;
+    }
+    angles.x = pitch;
+    angles.y = yaw;
+    angles.z = 0.f;
+}
+
 inline float getDistance(Vector pos1, Vector pos2) {
     // Do 3d pythag
     float a = abs(pos1.x-pos2.x);

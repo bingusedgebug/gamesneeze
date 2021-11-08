@@ -215,6 +215,58 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
     cmd->buttons = original_move.buttons;
 }
 
+void Features::Movement::rageAutoStrafe(CUserCmd *cmd) {
+    if (!CONFIGBOOL("Misc>Misc>Movement>RageAutoStrafe") || shouldEdgebug ||
+         !Globals::localPlayer || !Globals::localPlayer->health() ||
+         Globals::localPlayer->flags() & FL_ONGROUND ||
+         Globals::localPlayer->moveType() == MOVETYPE_LADDER ||
+         Globals::localPlayer->moveType() == MOVETYPE_NOCLIP)
+        return;
+
+    static float side = 1.f;
+    side = -side;
+
+    const Vector &velocity = Globals::localPlayer->velocity();
+    float idealStrafe =
+         std::clamp(RAD2DEG(atan(15.f / velocity.Length2D())), 0.f, 90.f);
+
+    QAngle wishAngles = cmd->viewangles;
+    static float oldYaw = 0.f;
+    float yawDelta = std::remainderf(wishAngles.y - oldYaw, 360.f);
+    oldYaw = wishAngles.y;  // TODO: try move this to after we change wishAngle ?
+
+    static ConVar *cl_sidespeed = Interfaces::convar->FindVar("cl_sidespeed");
+
+    if (abs(yawDelta) <= idealStrafe || abs(yawDelta) >= 30.f) {
+        QAngle veloDir;
+        vectorAngles(velocity, veloDir);
+        float veloYawDelta = std::remainderf(wishAngles.y - veloDir.y, 360.f);
+        float retrack =
+             std::clamp(RAD2DEG(atan(30.f / velocity.Length2D())), 0.f, 90.f) * 2.f;
+        if (veloYawDelta <= retrack || velocity.Length2D() <= 15.f) {
+            if (-retrack <= veloYawDelta || velocity.Length2D() <= 15.f) {
+                wishAngles.y += side * idealStrafe;
+                cmd->sidemove = cl_sidespeed->GetFloat() * side;
+            } else {
+                wishAngles.y = veloDir.y - retrack;
+                cmd->sidemove = cl_sidespeed->GetFloat();
+            }
+        } else {
+            wishAngles.y = veloDir.y + retrack;
+            cmd->sidemove = -cl_sidespeed->GetFloat();
+        }
+    } else if (yawDelta > 0.f)
+        cmd->sidemove = -cl_sidespeed->GetFloat();
+    else if (yawDelta != 0.f)
+        cmd->sidemove = cl_sidespeed->GetFloat();
+
+    QAngle viewBackup = cmd->viewangles;
+    cmd->viewangles = wishAngles;
+    startMovementFix(cmd);
+    cmd->viewangles = viewBackup;
+    endMovementFix(cmd);
+}
+
 void Features::Movement::draw() {
     if (Features::Movement::shouldEdgebug) {
         Globals::drawList->AddText(

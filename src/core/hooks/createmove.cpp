@@ -20,6 +20,8 @@ bool Hooks::CreateMove::hook(void* thisptr, float flInputSampleTime, CUserCmd* c
             Features::ViewModelXYZ::createMove();
         }
 
+        Features::Movement::rageAutoStrafe(cmd);
+
         startMovementFix(cmd);
             Features::RankReveal::createMove(cmd);
             Features::FastDuck::createMove(cmd);
