@@ -216,8 +216,11 @@ void Features::Movement::edgeBugPredictor(CUserCmd *cmd) {
 }
 
 void Features::Movement::rageAutoStrafe(CUserCmd *cmd) {
-    if (!CONFIGBOOL("Misc>Misc>Movement>RageAutoStrafe") || shouldEdgebug ||
-         !Globals::localPlayer || !Globals::localPlayer->health() ||
+    if (!CONFIGBOOL("Misc>Misc>Movement>RageAutoStrafe") ||
+         (CONFIGINT("Misc>Misc>Movement>RageAutoStrafe Key") &&
+              !Menu::CustomWidgets::isKeyDown(
+                   CONFIGINT("Misc>Misc>Movement>RageAutoStrafe Key"))) ||
+         shouldEdgebug || !Globals::localPlayer || !Globals::localPlayer->health() ||
          Globals::localPlayer->flags() & FL_ONGROUND ||
          Globals::localPlayer->moveType() == MOVETYPE_LADDER ||
          Globals::localPlayer->moveType() == MOVETYPE_NOCLIP)

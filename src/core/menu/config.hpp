@@ -365,6 +365,7 @@ inline std::unordered_map<std::string_view, ConfigItem> config{
      CONFIGITEM("Misc>Misc>Movement>EdgeBug TotalPredCap", 128),
      CONFIGITEM("Misc>Misc>Movement>EdgeBug SinglePredCap", 128),
      CONFIGITEM("Misc>Misc>Movement>RageAutoStrafe", false),
+     CONFIGITEM("Misc>Misc>Movement>RageAutoStrafe Key", 0),
      CONFIGITEM("Misc>Misc>Movement>Fast Duck", false),
 
      CONFIGITEM("Misc>Misc>Hitmarkers>Hitlogs", false),
