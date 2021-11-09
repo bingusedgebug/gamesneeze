@@ -232,12 +232,18 @@ void Features::Movement::rageAutoStrafe(CUserCmd *cmd) {
     const Vector &velocity = Globals::localPlayer->velocity();
     float idealStrafe =
          std::clamp(RAD2DEG(atan(15.f / velocity.Length2D())), 0.f, 90.f);
+    
 
     QAngle wishAngles = cmd->viewangles;
+    Vector strafeDir = Vector(cmd->forwardmove, cmd->sidemove, 0.f);
+    strafeDir.Normalize();
+    float strafeDirYawOffset = RAD2DEG(atan2f(strafeDir.y, strafeDir.x));
+    wishAngles.y -= strafeDirYawOffset;
+    sanitizeAngles(wishAngles);
     static float oldYaw = 0.f;
     float yawDelta = std::remainderf(wishAngles.y - oldYaw, 360.f);
-    oldYaw = wishAngles.y;  // TODO: try move this to after we change wishAngle ?
-
+    oldYaw = wishAngles.y;
+    
     static ConVar *cl_sidespeed = Interfaces::convar->FindVar("cl_sidespeed");
 
     if (abs(yawDelta) <= idealStrafe || abs(yawDelta) >= 30.f) {
@@ -261,7 +267,9 @@ void Features::Movement::rageAutoStrafe(CUserCmd *cmd) {
     } else if (yawDelta > 0.f)
         cmd->sidemove = -cl_sidespeed->GetFloat();
     else if (yawDelta != 0.f)
-        cmd->sidemove = cl_sidespeed->GetFloat();
+        cmd->sidemove = cl_sidespeed->GetFloat(); 
+
+    cmd->forwardmove = 0.f;
 
     QAngle viewBackup = cmd->viewangles;
     cmd->viewangles = wishAngles;

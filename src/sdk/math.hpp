@@ -53,6 +53,13 @@ inline void normalizeAngles(QAngle& angle) {
 		angle.y += 360.f;
 }
 
+inline void sanitizeAngles(QAngle& angle) {
+    normalizeAngles(angle);
+    angle.x = std::clamp(angle.x, -89.0f, 89.0f);
+    angle.y = std::clamp(angle.y, -180.0f, 180.0f);
+    angle.z = 0.0f;
+}
+
 inline QAngle calcAngle(const Vector& src, const Vector& dst) {
 	QAngle vAngle;
 	Vector delta((src.x - dst.x), (src.y - dst.y), (src.z - dst.z));
