@@ -285,6 +285,7 @@ void Menu::drawLegitTab() {
                 ImGui::SliderInt(
                      "##Kill Delay Time", &CONFIGINT("Legit>Misc>KillDelayTime"), 1, 300);
             }
+            ImGui::Checkbox("Trust Factor Meme", &CONFIGBOOL("Legit>Misc>TrustFacMeme"));
         }
         ImGui::EndChild();
     }

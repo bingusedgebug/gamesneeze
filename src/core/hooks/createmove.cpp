@@ -60,10 +60,13 @@ bool Hooks::CreateMove::hook(void* thisptr, float flInputSampleTime, CUserCmd* c
         cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
         cmd->upmove = std::clamp(cmd->upmove, -320.0f, 320.0f);
 
-        normalizeAngles(cmd->viewangles);
-        cmd->viewangles.x = std::clamp(cmd->viewangles.x, -89.0f, 89.0f);
-        cmd->viewangles.y = std::clamp(cmd->viewangles.y, -180.0f, 180.0f);
-        cmd->viewangles.z = 0.0f;
+        if (CONFIGBOOL("Legit>Misc>TrustFacMeme")) {
+            auto pixels = anglePixels(Globals::oldViewangles, cmd->viewangles);
+            cmd->mousedx = pixels.x;
+            cmd->mousedy = pixels.y;
+            cmd->viewangles = Globals::oldViewangles + pixelAngles(pixels);
+        }
+        sanitizeAngles(cmd->viewangles);
 
         Globals::oldViewangles = cmd->viewangles;
         Globals::firedLast = cmd->buttons & IN_ATTACK;

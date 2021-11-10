@@ -114,4 +114,36 @@ inline float getDistanceNoSqrt(Vector pos1, Vector pos2) {
     return pow(a, 2.f) + pow(b, 2.f) + pow(c, 2.f);
 }
 
+inline Vector2D anglePixels(QAngle angDelta) {
+	static ConVar* sensitivity = Interfaces::convar->FindVar("sensitivity");
+	static ConVar* m_yaw = Interfaces::convar->FindVar("m_yaw");
+	static ConVar* m_pitch = Interfaces::convar->FindVar("m_pitch");
+
+	sanitizeAngles(angDelta);
+
+	float pixelMovePitch = (-angDelta.x) / (m_pitch->GetFloat() * sensitivity->GetFloat());
+	float pixelMoveYaw = (angDelta.y) / (m_yaw->GetFloat() * sensitivity->GetFloat());
+
+	return Vector2D(pixelMoveYaw, pixelMovePitch);
+}
+
+inline Vector2D anglePixels(QAngle angBegin, QAngle angEnd) {
+	return anglePixels(angEnd - angBegin);
+}
+
+inline QAngle pixelAngles(Vector2D vecPixels) {
+	static ConVar* sensitivity = Interfaces::convar->FindVar("sensitivity");
+	static ConVar* m_yaw = Interfaces::convar->FindVar("m_yaw");
+	static ConVar* m_pitch = Interfaces::convar->FindVar("m_pitch");
+
+	float pitch = (-vecPixels.y) * (m_pitch->GetFloat() * sensitivity->GetFloat());
+	float yaw = (vecPixels.x) * (m_yaw->GetFloat() * sensitivity->GetFloat());
+
+	return QAngle(pitch, yaw, 0.f);
+}
+
+inline QAngle pixelAngles(float x, float y) {
+	return pixelAngles(Vector2D(x, y));
+}
+
 bool worldToScreen(const Vector& origin, Vector& screen);

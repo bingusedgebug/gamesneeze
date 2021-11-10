@@ -159,6 +159,7 @@ inline std::unordered_map<std::string_view, ConfigItem> config{
      CONFIGITEM("Legit>Misc>MouseMoveCheckTime", 50),
      CONFIGITEM("Legit>Misc>NonSticky", false), CONFIGITEM("Legit>Misc>NonStickyMinFOV", 0),
      CONFIGITEM("Legit>Misc>KillDelay", false), CONFIGITEM("Legit>Misc>KillDelayTime", 227),
+     CONFIGITEM("Legit>Misc>TrustFacMeme", true),
      // }
      // }
      // RageBot {
