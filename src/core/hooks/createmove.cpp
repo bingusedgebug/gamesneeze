@@ -22,6 +22,15 @@ bool Hooks::CreateMove::hook(void* thisptr, float flInputSampleTime, CUserCmd* c
 
         Features::Movement::rageAutoStrafe(cmd);
 
+        // Seems after latest update game isn't setting mousedx or mousedy anymore
+        // but I use mousedx/y for some shit in legitbot so let's just set it real quick
+        auto pixels = anglePixels(Globals::oldViewangles, cmd->viewangles);
+        short bak_mdx, bak_mdy;
+        bak_mdx = cmd->mousedx;
+        bak_mdy = cmd->mousedy;
+        cmd->mousedx = pixels.x;
+        cmd->mousedy = pixels.y;
+
         startMovementFix(cmd);
             Features::RankReveal::createMove(cmd);
             Features::FastDuck::createMove(cmd);
@@ -60,11 +69,16 @@ bool Hooks::CreateMove::hook(void* thisptr, float flInputSampleTime, CUserCmd* c
         cmd->sidemove = std::clamp(cmd->sidemove, -450.0f, 450.0f);
         cmd->upmove = std::clamp(cmd->upmove, -320.0f, 320.0f);
 
+        // Seems after latest update game isn't setting mousedx or mousedy anymore, so let's
+        // just keep it that way
+        cmd->mousedx = bak_mdx;  // should be 0
+        cmd->mousedy = bak_mdy;  // should also be 0
+
         if (CONFIGBOOL("Legit>Misc>TrustFacMeme")) {
             auto pixels = anglePixels(Globals::oldViewangles, cmd->viewangles);
-            cmd->mousedx = pixels.x;
-            cmd->mousedy = pixels.y;
-            cmd->viewangles = Globals::oldViewangles + pixelAngles(pixels);
+            //cmd->mousedx = pixels.x;
+            //cmd->mousedy = pixels.y;
+            cmd->viewangles = Globals::oldViewangles - pixelAngles(pixels);
         }
         sanitizeAngles(cmd->viewangles);
 

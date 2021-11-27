@@ -128,7 +128,7 @@ inline Vector2D anglePixels(QAngle angDelta) {
 }
 
 inline Vector2D anglePixels(QAngle angBegin, QAngle angEnd) {
-	return anglePixels(angEnd - angBegin);
+	return anglePixels(angBegin - angEnd);
 }
 
 inline QAngle pixelAngles(Vector2D vecPixels) {
